@@ -1,0 +1,44 @@
+#include <LiquidCrystal.h>
+
+// Initialize the LCD (RS, E, D4, D5, D6, D7)
+LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
+
+// Define the PIR sensor and buzzer pins
+const int pirPin = 2;
+const int buzzerPin = 3;
+
+void setup() {
+  // Set up the LCD's number of columns and rows
+  lcd.begin(16, 2);
+
+  // Print a welcome message
+  lcd.print("PIR Sensor Init");
+
+  // Set PIR sensor as input and buzzer as output
+  pinMode(pirPin, INPUT);
+  pinMode(buzzerPin, OUTPUT);
+
+  // Allow the PIR sensor to calibrate
+  delay(5000);  // 5 seconds calibration time
+  lcd.clear();
+  lcd.print("Ready to Detect");
+}
+
+void loop() {
+  // Read the PIR sensor output
+  int motionDetected = digitalRead(pirPin);
+
+  if (motionDetected == HIGH) {
+    // If motion is detected
+    lcd.clear();
+    lcd.print("Motion Detected!");
+    digitalWrite(buzzerPin, HIGH);  // Turn on the buzzer
+    delay(1000);                    // Delay for 1 second
+    digitalWrite(buzzerPin, LOW);   // Turn off the buzzer
+  } else {
+    // If no motion is detected
+    lcd.clear();
+    lcd.print("No Motion");
+    delay(500);  // Delay for half a second
+  }
+}
